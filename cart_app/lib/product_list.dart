@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/widgets.dart';
@@ -86,20 +87,43 @@ class _ProductListState extends State<ProductList> {
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                Column(children: [
-                                  Text(
-                                    productName[index].toString(),
-                                    style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  Text(
-                                    productUnit[index].toString(),
-                                    style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ]),
+                                Expanded(
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          productName[index].toString(),
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        Text(
+                                          productUnit[index].toString() +
+                                              "  " +
+                                              r"$" +
+                                              productPrice[index].toString(),
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Container(
+                                            height: 35,
+                                            width: 100,
+                                            child: Center(
+                                                child: Text('Add to cart!')),
+                                            decoration: BoxDecoration(
+                                                color: Colors.purple[200],
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                          ),
+                                        ),
+                                      ]),
+                                ),
                               ],
                             ),
                           ],
