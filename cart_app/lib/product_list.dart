@@ -109,19 +109,6 @@ class _ProductListState extends State<ProductList> {
                                               fontSize: 18,
                                               fontWeight: FontWeight.w500),
                                         ),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Container(
-                                            height: 35,
-                                            width: 100,
-                                            child: Center(
-                                                child: Text('Add to cart!')),
-                                            decoration: BoxDecoration(
-                                                color: Colors.purple[200],
-                                                borderRadius:
-                                                    BorderRadius.circular(5)),
-                                          ),
-                                        ),
                                       ]),
                                 ),
                               ],
