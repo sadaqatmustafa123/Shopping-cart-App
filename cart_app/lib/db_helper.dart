@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io' as io;
+import 'package:path/path.dart';
 import 'package:cart_app/cart_model.dart';
 
 class DBHelper {
@@ -16,5 +17,22 @@ class DBHelper {
 
   initDatabase() async {
     io.Directory documentDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentDirectory.path, 'cart.db');
+    var db = await openDatabase(
+      path,
+      version: 1,
+      onCreate: _onCreate,
+    );
+  }
+
+  _onCreate(Database db, int version) async {
+    await db.execute(
+        'CREATE TABLE cart (id INTEGER PRIMARY KEY , productId VARCHAR UNIQUE,productName TEXT,initialPrice INTEGER, productPrice INTEGER , quantity INTEGER, unitTag TEXT , image TEXT)');
+  }
+
+  Future<Cart> insert(Cart cart) async {
+    var dbClient = await db;
+    await dbClient!.insert('cart', cart.toMap());
+    return cart;
   }
 }
