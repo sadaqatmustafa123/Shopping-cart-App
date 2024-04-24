@@ -23,6 +23,7 @@ class DBHelper {
       version: 1,
       onCreate: _onCreate,
     );
+    return db;
   }
 
   _onCreate(Database db, int version) async {

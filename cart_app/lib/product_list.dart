@@ -1,7 +1,11 @@
+import 'package:cart_app/cart_model.dart';
+import 'package:cart_app/cart_provider.dart';
+import 'package:cart_app/db_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 class ProductList extends StatefulWidget {
   const ProductList({Key? key}) : super(key: key);
@@ -11,6 +15,7 @@ class ProductList extends StatefulWidget {
 }
 
 class _ProductListState extends State<ProductList> {
+  DBHelper? dbHelper = DBHelper();
   List<String> productName = [
     'Mango',
     'Orange',
@@ -40,18 +45,29 @@ class _ProductListState extends State<ProductList> {
     'https://images.unsplash.com/photo-1519996529931-28324d5a630e?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   ];
 
+  // Define a function to handle the button press
+  void addToCart(int index) {
+    // Add the product to the shopping cart
+    print('Added ${productName[index]} to cart');
+  }
+
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<CartProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Product List'),
         centerTitle: true,
-        actions: const [
+        actions: [
           Center(
             child: badges.Badge(
-              badgeContent: Text(
-                '3',
-                style: TextStyle(color: Colors.white),
+              badgeContent: Consumer<CartProvider>(
+                builder: (context, value, child) {
+                  return Text(
+                    value.getCounter().toString(),
+                    style: TextStyle(color: Colors.white),
+                  );
+                },
               ),
               child: Icon(Icons.shopping_bag),
             ),
@@ -110,6 +126,32 @@ class _ProductListState extends State<ProductList> {
                                               fontWeight: FontWeight.w500),
                                         ),
                                       ]),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    dbHelper!
+                                        .insert(Cart(
+                                            id: index,
+                                            productId: index.toString(),
+                                            productName:
+                                                productName[index].toString(),
+                                            initialPrice: productPrice[index],
+                                            productPrice: productPrice[index],
+                                            quantity: 1,
+                                            unitTag:
+                                                productUnit[index].toString(),
+                                            image:
+                                                productImage[index].toString()))
+                                        .then((value) {
+                                      print('Product is added to cart');
+                                      cart.addTotalPrice(double.parse(
+                                          productPrice[index].toString()));
+                                      cart.addCounter();
+                                    }).onError((error, stackTrace) {
+                                      print(error.toString());
+                                    });
+                                  },
+                                  child: const Text('Add to Cart'),
                                 ),
                               ],
                             ),
